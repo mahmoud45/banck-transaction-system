@@ -1,0 +1,69 @@
+@model IEnumerable<BankAccount>
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Bank Accounts";
+    var username = @HttpContextAccessor.HttpContext.Session.GetString("username");
+}
+
+<div class="row">
+    <div class="col col-md-8 offset-2">
+        <div class="row">
+            @if(TempData["error"] != null)
+            {
+                <div class="col-md-12 alert alert-danger">
+                    <span><b>@TempData["error"]</b></span>
+                </div>
+            }
+            <a id="add-account" class="btn btn-outline-primary" asp-controller="BankAccount" asp-action="AddAccount" asp-route-Name=@username>
+                Add Account
+            </a>
+        </div>
+        
+        @if(Model.Any())
+        {
+            <table id="accounts-table" class="table">
+                <thead>
+                    <tr class="text-center">
+                        <th>@Html.DisplayNameFor(model => model.Id)</th>
+                        <th>Current Balance</th>
+                        <th>Creation Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="text-center">
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.CurrentBalance)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.CreationDate)
+                        </td>
+                        <td>
+                            <a class="btn btn-outline-primary" asp-controller="BankTransaction" asp-action="MakeTransaction" asp-route-Name=@username asp-route-Id=@item.Id>
+                                Make Transaction
+                            </a>
+                            <a class="btn btn-outline-primary" asp-controller="BankTransaction" asp-action="Transactions" asp-route-Name=@username asp-route-accountId=@item.Id>
+                                Transaction
+                            </a>
+                            <a class="btn btn-outline-primary delete-account" asp-controller="BankAccount" asp-action="DeleteAccount" asp-route-Name=@username asp-route-accountId=@item.Id>
+                                Delete Account
+                            </a>
+                        </td>
+                    </tr>
+                }
+    
+                </tbody>
+            </table>
+        }
+    </div>
+    <span id="msg"></span>
+</div>
+
+<script src="~/js/AddAccount.js"></script>

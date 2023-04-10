@@ -1,0 +1,42 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Home Page";
+    var username = @HttpContextAccessor.HttpContext.Session.GetString("username");
+}
+@if(username != null)
+{
+    <div class="row">
+        <div class="col-md-8 offset-2">
+                <div class="col-md-6 alert offset-3 text-center">
+                    <span><b><h2>Welcome @username</h2></b></span>
+                </div>
+        </div>
+    </div>
+}else
+{
+    <div class="text-center">
+        <div class="row">
+            <div class="col">
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+            </div>
+        </div>
+        <div class="row align-items-center">
+            <div class="col-md-6 offset-3">
+                <div class="col-md-8 offset-2 text-center shadow-none p-4 mb-4 bg-light">
+                    <a asp-controller="Customers" asp-action="Login" class="btn btn-outline-success btn-block">Login</a>
+                    <div class="col-md-4 offset-4 text-center"><span>or</span></div>
+                    <a asp-controller="Customers" asp-action="Register" class="btn btn-outline-primary btn-block">Register</a>
+                </div>
+            </div>
+        </div>  
+    </div>
+}
